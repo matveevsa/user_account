@@ -13,7 +13,7 @@ GOFILES ?= $(shell find . -name "*.go" -type f -not -path "./vendor/*" -not -pat
 build:
 	@echo "Building $(APP_NAME) ..."
 	@mkdir -p bin
-	go build $(LDFLAGS) -o $(BINARY_NAME)
+	go build $(LDFLAGS) -o $(BINARY_NAME) $(MAIN_PATH)
 # Run the application
 run: build
 	@echo "Running $(APP_NAME) ..."
@@ -93,3 +93,6 @@ dev: fmt lint test build
 # CI/CD workflow
 ci: deps fmt lint test build
 .PHONY: build run run-only deps deps-update fmt lint test test-coverage bench clean install docs help dev ci
+
+rundeps:
+	docker compose -f ./docker/docker-compose.yml up -d
