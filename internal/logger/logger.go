@@ -28,7 +28,7 @@ func New(cfg *config.Config) zerolog.Logger {
 				return color.New(color.FgYellow).Sprint("WRN")
 			case "ERROR":
 				return color.New(color.FgRed).Sprint("ERR")
-			case "DENUG":
+			case "DEBUG":
 				return color.New(color.FgBlue).Sprint("DBG")
 			default:
 				return level
@@ -48,7 +48,10 @@ func New(cfg *config.Config) zerolog.Logger {
 	spew.Config.DisableCapacities = true
 	spew.Config.SortKeys = true
 
-	dump := spew.Sdump(cfg)
+	// Не логируем пароль от БД
+	logCfg := *cfg
+	logCfg.DbDsn = "***"
+	dump := spew.Sdump(logCfg)
 
 	keyColor := color.New(color.FgCyan).SprintfFunc()
 	re := regexp.MustCompile(`(?m)^(\s*)([A-Za-z0-9_]+)`)

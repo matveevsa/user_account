@@ -43,25 +43,4 @@ func RepoUsersToUsers(users []repomodel.User) []model.User {
 	return res
 }
 
-func CreateUserToRepoUser(user model.CreateUser) repomodel.User {
-	return repomodel.User{
-		Login:      user.Login,
-		Email:      user.Email,
-		Phone:      user.Phone,
-		FirstName:  user.FirstName,
-		LastName:   user.LastName,
-		MiddleName: user.MiddleName,
-		Age:        user.Age,
-	}
-}
 
-func UpdateUserToRepoUser(user model.UpdateUser) repomodel.User {
-	return repomodel.User{
-		Email:      user.Email,
-		Phone:      user.Phone,
-		FirstName:  user.FirstName,
-		LastName:   user.LastName,
-		MiddleName: user.MiddleName,
-		Age:        user.Age,
-	}
-}

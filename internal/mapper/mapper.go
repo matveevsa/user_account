@@ -8,6 +8,10 @@ import (
 )
 
 func PbToUser(userpb *accountpb.User) model.User {
+	if userpb == nil {
+		return model.User{}
+	}
+
 	return model.User{
 		ID:         userpb.Id,
 		Login:      userpb.Login,
@@ -54,6 +58,10 @@ func PbsToUsers(pbs []*accountpb.User) []model.User {
 }
 
 func PbToUserCreate(pb *accountpb.CreateUser) model.CreateUser {
+	if pb == nil {
+		return model.CreateUser{}
+	}
+
 	return model.CreateUser{
 		Login:      pb.Login,
 		Email:      pb.Email,
@@ -66,6 +74,10 @@ func PbToUserCreate(pb *accountpb.CreateUser) model.CreateUser {
 }
 
 func PbToUserUpdate(pb *accountpb.User) model.UpdateUser {
+	if pb == nil {
+		return model.UpdateUser{}
+	}
+
 	return model.UpdateUser{
 		Email:      pb.Email,
 		Phone:      pb.Phone,
