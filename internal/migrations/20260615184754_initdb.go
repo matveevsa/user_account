@@ -19,11 +19,11 @@ func upInitdb(ctx context.Context, tx *sql.Tx) error {
 		    email TEXT NOT NULL UNIQUE,
 		    phone TEXT,
 		    first_name TEXT,
-		    second_name TEXT,
+		    last_name TEXT,
 		    middle_name TEXT,
 		    age INT,
-		    created_at TIMESTAMP NOT NULL DEAFULT NOW(),
-		    updated_at TIMESTAMP NOT NULL DEAFULT NOW(),
+		    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 		)
 	`)
 	return err

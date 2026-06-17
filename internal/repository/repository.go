@@ -14,10 +14,10 @@ import (
 
 type Repository struct {
 	db *gorm.DB
-	lg zerolog.Logger
+	lg *zerolog.Logger
 }
 
-func NewRepository(db *gorm.DB, logger zerolog.Logger) *Repository {
+func NewRepository(db *gorm.DB, logger *zerolog.Logger) *Repository {
 	return &Repository{
 		db: db,
 		lg: logger,
@@ -26,7 +26,7 @@ func NewRepository(db *gorm.DB, logger zerolog.Logger) *Repository {
 func (r *Repository) CreateUser(ctx context.Context, user model.User) error {
 	userRepo := mapper.UserToRepoUser(user)
 	res := r.db.WithContext(ctx).
-		Clauses(clause.OnConflict{UpdateAll: true}).
+		Clauses(clause.OnConflict{DoNothing: false}).
 		Create(&userRepo)
 	if res.Error != nil {
 		r.lg.Error().Msgf("failed to save user")
@@ -81,13 +81,28 @@ func (r *Repository) DeleteUser(ctx context.Context, userID uint64) error {
 		return fmt.Errorf("failed to delete user id = %v: %w", userID, res.Error)
 	}
 
+	if res.RowsAffected == 0 {
+		return fmt.Errorf("user not found")
+	}
+
 	return nil
 }
 
-func (r *Repository) UpdateUser(ctx context.Context, userID uint64, user model.User) error {
+func (r *Repository) UpdateUser(ctx context.Context, userID uint64, user model.UpdateUser) error {
+	updates := map[string]interface{}{
+		"email":       user.Email,
+		"phone":       user.Phone,
+		"first_name":  user.FirstName,
+		"last_name":   user.LastName,
+		"middle_name": user.MiddleName,
+		"age":         user.Age,
+		"updated_at":  user.UpdatedAt,
+	}
+
 	res := r.db.WithContext(ctx).
+		Model(&repomodel.User{}).
 		Where("id = ?", userID).
-		Updates(&user)
+		Updates(updates)
 
 	if res.Error != nil {
 		r.lg.Error().Msgf("failed to update user")

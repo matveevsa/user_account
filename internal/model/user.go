@@ -32,4 +32,5 @@ type UpdateUser struct {
 	LastName   string
 	MiddleName string
 	Age        uint32
+	UpdatedAt  time.Time
 }
